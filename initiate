@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+# Since Heroku and other environments won't have access to private GitHub
+# dependencies, optionally copy a private SSH key into place from an
+# environment variable (base64 encoded). This should come from a user who ONLY
+# has permission to read from the repositories a project needs.
+deploy-key-setup() {
+  @if [[ $$DEPLOY_SSH_PRIVATE_KEY == "" ]]; then
+    echo 'No deploy key found, skipping setup';
+    exit 1;
+  fi
+
+  @mkdir -p ~/.ssh
+  @echo $$DEPLOY_SSH_PRIVATE_KEY | base64 --decode > ~/.ssh/shyp-deploy-key
+  @chmod 400 ~/.ssh/shyp-deploy-key
+  -mv -f ~/.ssh/config ~/.ssh/config.backup
+  @echo -e "Host github.com\n"\
+         " IdentityFile ~/.ssh/shyp-deploy-key\n"\
+         " IdentitiesOnly yes\n"\
+         " UserKnownHostsFile=/dev/null\n"\
+         " StrictHostKeyChecking no" > ~/.ssh/config
+}
+
+deploy-key-teardown() {
+	@if [[ $$DEPLOY_SSH_PRIVATE_KEY == "" ]]; then
+    echo 'No deploy key found, skipping teardown';
+    exit 1;
+  fi
+
+  -rm -f ~/.ssh/shyp-deploy-key
+  -rm -f ~/.ssh/config
+  -mv -f ~/.ssh/config.backup ~/.ssh/config
+}
+
+main() {
+  @if [[ $1 == "setup" ]]; then
+    deploy-key-setup
+  else
+    deploy-key-teardown
+  fi
+}
+
+main "$@"
