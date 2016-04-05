@@ -25,7 +25,10 @@ deploy-key-teardown:
  ./initiate teardown
 ```
 - Create a new machine user on Github that has read access to the private repos you need.
+- Create an ssh key by following these [steps] (https://help.github.com/articles/generating-an-ssh-key/)
+- Save the public key to Github
+- Base64 encode the private key you just generated
 - Configure an environment variable for heroku to use
-`heroku config:set DEPLOY_SSH_PRIVATE_KEY={MACHINE_USER_PRIVATE_KEY} --app {APP_NAME}`
+`heroku config:set DEPLOY_SSH_PRIVATE_KEY={BASE64_MACHINE_USER_PRIVATE_KEY} --app {APP_NAME}`
 
 Once you deploy - you should be all setup!
