@@ -15,8 +15,16 @@ Here is how you go about doing that.
     "preinstall": "make deploy-key-setup || true",
     "postinstall": "make deploy-key-teardown || true"
   }
+
+"dependencies": {
+  ...
+  "shyp-toolkit": "Shyp/shyp-toolkit#v1.0.0",
+  ...
+}
 ```
+
 - In your `Makefile`, add the following
+
 ```
 deploy-key-setup:
   $$(npm bin)/deploy-key setup
@@ -24,6 +32,7 @@ deploy-key-setup:
 deploy-key-teardown:
   $$(npm bin)/deploy-key teardown
 ```
+
 - Create a new machine user on Github that has read access to the private repos you need.
 - Create an ssh key by following these [steps] (https://help.github.com/articles/generating-an-ssh-key/)
 - Save the public key to Github
