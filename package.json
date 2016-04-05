@@ -1,10 +1,10 @@
 {
-  "name": "heroku-private-dependency-setup",
+  "name": "shyp-toolkit",
   "version": "1.0.0",
-  "description": "Tools to help manage private dependencies",
+  "description": "Tools to help manage Shyp deployment pipeline",
   "author": "Shyp <platform@shyp.com>",
   "license": "MIT",
   "bin": {
-    "deploy-key": "./initiate"
+    "deploy-key": "./bin/deploy-key"
   }
 }
