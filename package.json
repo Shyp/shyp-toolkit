@@ -1,0 +1,10 @@
+{
+  "name": "heroku-private-dependency-setup",
+  "version": "1.0.0",
+  "description": "Tools to help manage private dependencies",
+  "author": "Shyp <platform@shyp.com>",
+  "license": "MIT",
+  "bin": {
+    "deploy-key": "./initiate"
+  }
+}
