@@ -7,16 +7,16 @@ set -eo pipefail
 # environment variable (base64 encoded). This should come from a user who ONLY
 # has permission to read from the repositories a project needs.
 deploy-key-setup() {
-  @if [[ $$DEPLOY_SSH_PRIVATE_KEY == "" ]]; then
+  if [[ $DEPLOY_SSH_PRIVATE_KEY == "" ]]; then
     echo 'No deploy key found, skipping setup';
     exit 1;
   fi
 
-  @mkdir -p ~/.ssh
-  @echo $$DEPLOY_SSH_PRIVATE_KEY | base64 --decode > ~/.ssh/shyp-deploy-key
-  @chmod 400 ~/.ssh/shyp-deploy-key
-  -mv -f ~/.ssh/config ~/.ssh/config.backup
-  @echo -e "Host github.com\n"\
+  mkdir -p ~/.ssh
+  echo $DEPLOY_SSH_PRIVATE_KEY | base64 --decode > ~/.ssh/shyp-deploy-key
+  chmod 400 ~/.ssh/shyp-deploy-key
+  mv -f ~/.ssh/config ~/.ssh/config.backup || true
+  echo -e "Host github.com\n"\
          " IdentityFile ~/.ssh/shyp-deploy-key\n"\
          " IdentitiesOnly yes\n"\
          " UserKnownHostsFile=/dev/null\n"\
@@ -24,18 +24,18 @@ deploy-key-setup() {
 }
 
 deploy-key-teardown() {
-	@if [[ $$DEPLOY_SSH_PRIVATE_KEY == "" ]]; then
+  if [[ $DEPLOY_SSH_PRIVATE_KEY == "" ]]; then
     echo 'No deploy key found, skipping teardown';
     exit 1;
   fi
 
-  -rm -f ~/.ssh/shyp-deploy-key
-  -rm -f ~/.ssh/config
-  -mv -f ~/.ssh/config.backup ~/.ssh/config
+  rm -f ~/.ssh/shyp-deploy-key || true
+  rm -f ~/.ssh/config || true
+  mv -f ~/.ssh/config.backup ~/.ssh/config || true
 }
 
 main() {
-  @if [[ $1 == "setup" ]]; then
+  if [[ $1 == "setup" ]]; then
     deploy-key-setup
   else
     deploy-key-teardown
