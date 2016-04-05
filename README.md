@@ -1,4 +1,8 @@
-# Setup Node app with private git dependencies
+# Shyp Toolkit
+
+The Shyp toolkit serves as home to various scripts that multiple Shyp apps use throughout the deployment pipeline
+
+## Setup Node app with private git dependencies
 
 If your app uses any private git dependencies, heroku `npm install` will fail. To get around that, you would need to tap into heroku's build process so that right before `npm install` is called, you provide heroku with a private ssh key that it can use to access your repos.
 
@@ -11,19 +15,24 @@ Here is how you go about doing that.
     "preinstall": "make deploy-key-setup || true",
     "postinstall": "make deploy-key-teardown || true"
   }
+
+"dependencies": {
+  ...
+  "shyp-toolkit": "Shyp/shyp-toolkit#v1.0.0",
+  ...
+}
 ```
+
 - In your `Makefile`, add the following
+
 ```
 deploy-key-setup:
- curl --remote-name https://raw.githubusercontent.com/Shyp/heroku-private-dependency-setup/master/initiate
- chmod +x initiate
- ./initiate setup
+  $$(npm bin)/deploy-key setup
 
 deploy-key-teardown:
- curl --remote-name https://raw.githubusercontent.com/Shyp/heroku-private-dependency-setup/master/initiate
- chmod +x initiate
- ./initiate teardown
+  $$(npm bin)/deploy-key teardown
 ```
+
 - Create a new machine user on Github that has read access to the private repos you need.
 - Create an ssh key by following these [steps] (https://help.github.com/articles/generating-an-ssh-key/)
 - Save the public key to Github
