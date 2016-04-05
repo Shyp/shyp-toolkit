@@ -24,7 +24,7 @@ deploy-key-setup() {
 }
 
 deploy-key-teardown() {
-	if [[ $DEPLOY_SSH_PRIVATE_KEY == "" ]]; then
+  if [[ $DEPLOY_SSH_PRIVATE_KEY == "" ]]; then
     echo 'No deploy key found, skipping teardown';
     exit 1;
   fi
