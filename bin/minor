@@ -3,7 +3,7 @@
 set -eo pipefail
 
 main() {
-  if "$(git status --porcelain)" != ""; then
+  if [[ "$(git status --porcelain)" != "" ]]; then
     echo 'Working directory is not clean (try `git status`), not releasing.';
     exit 1;
   fi
