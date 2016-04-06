@@ -5,6 +5,9 @@
   "author": "Shyp <platform@shyp.com>",
   "license": "MIT",
   "bin": {
-    "deploy-key": "./bin/deploy-key"
+    "deploy-key": "./bin/deploy-key",
+    "deploy": "./bin/deploy",
+    "minor": "./bin/minor",
+    "patch": "./bin/patch"
   }
 }

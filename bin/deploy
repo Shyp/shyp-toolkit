@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+main() {
+  if ! git diff-files --quiet ; then
+    echo "\033[91mCurrent working branch is dirty; cannot deploy. Please commit/stash your working tree \033[0m";
+    exit 1;
+  fi
+
+  # So local branches are up to date
+  git fetch origin
+  git checkout master
+
+  if ! git describe --exact-match --tags HEAD ; then
+    echo "\033[91mHEAD does not have a matching tag; aborting. Please tag this commit\033[0m";
+    exit 1;
+  fi
+
+  git checkout production
+  git pull --rebase origin production
+  git merge --ff-only master
+  git push origin production
+  git checkout develop
+}
+
+main "$@"
