@@ -13,11 +13,12 @@ main() {
   git checkout develop
   git pull --rebase origin develop
 
-  # If current HEAD is not tagged, then create a tag for it
-  if ! git describe --exact-match --tags HEAD ; then
-    npm version patch
+  if git describe --exact-match --tags HEAD ; then
+    echo "\033[91mHEAD already has a matching tag, not creating another.\033[0m";
+    exit 1;
   fi
 
+  npm version patch
   git push origin develop --follow-tags
   git checkout master
   git pull --rebase origin master
