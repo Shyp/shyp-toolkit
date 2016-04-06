@@ -3,11 +3,21 @@
 set -eo pipefail
 
 main() {
+  if git status --porcelain != ""; then
+    echo 'Working directory is not clean (try `git status`), not releasing.';
+    exit 1;
+  fi
+
   # So local branches are up to date.
   git fetch origin
   git checkout develop
   git pull --rebase origin develop
-  npm version patch
+
+  # If current HEAD is not tagged, then create a tag for it
+  if ! git describe --exact-match --tags HEAD ; then
+    npm version patch
+  fi
+
   git push origin develop --follow-tags
   git checkout master
   git pull --rebase origin master
