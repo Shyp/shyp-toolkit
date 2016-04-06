@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+main() {
+  # So local branches are up to date.
+  git fetch origin
+  git checkout develop
+  git pull --rebase origin develop
+  npm version patch
+  git push origin develop --follow-tags
+  git checkout master
+  git pull --rebase origin master
+  git merge --ff-only develop
+  git push origin master
+}
+
+main "$@"
