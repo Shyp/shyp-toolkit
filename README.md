@@ -58,13 +58,8 @@ Once you deploy - you should be all setup!
 
 ## How to work with patch/minor/deploy
 - In your `package.json`, add the new shyp-toolkit dependency
-```
-"dependencies": {
-  ...
-  "shyp-toolkit": "Shyp/shyp-toolkit#{release_version}",
-  ...
-}
-```
+
+```npm install Shyp/shyp-toolkit#{release_version} --save```
 
 - In your `Makefile`, add the following
 
