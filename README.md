@@ -70,6 +70,9 @@ patch:
 minor:
 	$$(npm bin)/minor
 
+major:
+	$$(npm bin)/major
+
 deploy:
 	$$(npm bin)/deploy
 ```
