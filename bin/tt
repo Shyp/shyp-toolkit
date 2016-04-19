@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# Disable globbing, so *.test.js doesn't get turned into a single file or two by
+# Bash.
+set -f
+set -eo pipefail
+
+main() {
+    local current_directory=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+    local node_directory="$current_directory/../node_modules"
+    local test_directory="$current_directory/../test"
+    if [[ -z "$DEPLOYMENT_NAME" ]]; then
+      DEPLOYMENT_NAME='test'
+    fi
+    local cmd="$node_directory/mocha/bin/mocha --opts $test_directory/mocha.tt.opts"
+
+    if [[ `uname` == 'Linux' ]]; then
+        local timecmd='time'
+    else
+        local timecmd='gtime'
+    fi
+
+    # see http://stackoverflow.com/a/32276904/329700 for handling of the args
+    # variable
+    if [[ "$#" == "0" ]]; then
+        local file_args="$test_directory"'/**/*.test.coffee'" $test_directory"'/**/*.test.js'
+        local args=($file_args)
+    else
+        local args=("$@")
+    fi
+
+    # XXX gtime vs.time
+    local FORMAT='-f%E elapsed\n%M Max RSS (Kb)\n%W main memory swaps\n%P CPU percentage\n%c context switches'
+
+    if [[ -n "$NO_COLORS" ]]; then
+        TZ=GMT NODE_ENV='test' DEPLOYMENT_NAME="$DEPLOYMENT_NAME" $timecmd "$FORMAT" $cmd --no-colors "${args[@]}"
+    elif [[ "$CI" == true ]]; then
+        # CircleCI doesn't have a /usr/bin/time command. I have yelled at them
+        # about this to no avail.
+        TZ=GMT NODE_ENV='test' DEPLOYMENT_NAME="$DEPLOYMENT_NAME" $cmd "${args[@]}"
+    else
+        TZ=GMT NODE_ENV='test' DEPLOYMENT_NAME="$DEPLOYMENT_NAME" $timecmd "$FORMAT" $cmd "${args[@]}"
+    fi
+}
+main "$@"

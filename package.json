@@ -7,7 +7,9 @@
   "bin": {
     "deploy-key": "./bin/deploy-key",
     "deploy": "./bin/deploy",
+    "major": "./bin/major",
     "minor": "./bin/minor",
-    "patch": "./bin/patch"
+    "patch": "./bin/patch",
+    "tt": "./bin/tt"
   }
 }

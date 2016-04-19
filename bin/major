@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+main() {
+  if [[ "$(git status --porcelain)" != "" ]]; then
+    echo 'Working directory is not clean (try `git status`), not releasing.';
+    exit 1;
+  fi
+
+  # So local branches are up to date.
+  git fetch origin
+  git checkout develop
+  git pull --rebase origin develop
+
+  if git describe --exact-match --tags HEAD ; then
+    echo "\033[91mHEAD already has a matching tag, not creating another.\033[0m";
+    exit 1;
+  fi
+
+  npm version major
+  git push origin develop --follow-tags
+  git checkout master
+  git pull --rebase origin master
+  git merge --ff-only develop
+  git push origin master
+}
+
+main "$@"
