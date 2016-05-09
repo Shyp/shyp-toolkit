@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Use this for projects that only have a master branch
 
 set -eo pipefail
 
