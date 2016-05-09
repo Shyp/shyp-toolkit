@@ -10,8 +10,8 @@ main() {
 
   # So local branches are up to date.
   git fetch origin
-  git checkout develop
-  git pull --rebase origin develop
+  git checkout master
+  git pull --rebase origin master
 
   if git describe --exact-match --tags HEAD ; then
     echo "\033[91mHEAD already has a matching tag, not creating another.\033[0m";
@@ -19,11 +19,7 @@ main() {
   fi
 
   npm version minor
-  git push origin develop --follow-tags
-  git checkout master
-  git pull --rebase origin master
-  git merge --ff-only develop
-  git push origin master
+  git push origin master --follow-tags
 }
 
 main "$@"
