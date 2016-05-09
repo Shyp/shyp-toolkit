@@ -1,10 +1,10 @@
 .PHONY: patch minor deploy
 
 patch:
-	./bin/patch
+	./bin/patch-library
 
 minor:
-	./bin/minor
+	./bin/minor-library
 
-deploy:
-	./bin/deploy
+major:
+	./bin/major-library
