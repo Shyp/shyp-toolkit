@@ -10,6 +10,9 @@
     "major": "./bin/major",
     "minor": "./bin/minor",
     "patch": "./bin/patch",
+    "major-library": "./bin/major-library",
+    "minor-library": "./bin/minor-library",
+    "patch-library": "./bin/patch-library",
     "tt": "./bin/tt"
   }
 }
